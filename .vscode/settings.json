@@ -1,0 +1,11 @@
+{
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#3F2818",
+        "titleBar.activeBackground": "#583922",
+        "titleBar.activeForeground": "#FDFAF9"
+    },
+    "cSpell.words": [
+        "glab",
+        "LASTEXITCODE"
+    ]
+}
