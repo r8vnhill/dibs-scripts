@@ -9,9 +9,7 @@ param(
 
 $invoker = Join-Path $PSScriptRoot '..' 'core' 'Invoke-Tool.ps1' -Resolve
 
-# Usar ruta nativa para -C (evita prefijos de proveedor)
-$rp = Resolve-Path -LiteralPath $LiteralPath
-$repoPath = if ($rp.ProviderPath) { $rp.ProviderPath } else { $rp.Path }
+$repoPath = $PSCmdlet.GetResolvedProviderPathFromPSPath($LiteralPath)
 
 $state = @{
     Path           = $repoPath

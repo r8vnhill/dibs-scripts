@@ -15,8 +15,7 @@ param(
 
 $invoker = Join-Path $PSScriptRoot '..' 'core' 'Invoke-Tool.ps1' -Resolve
 
-$rp = Resolve-Path -LiteralPath $Path
-$repoPath = if ($rp.ProviderPath) { $rp.ProviderPath } else { $rp.Path }
+$repoPath = $PSCmdlet.GetResolvedProviderPathFromPSPath($Path)
 
 $result = @{
     RepoPath = $repoPath
