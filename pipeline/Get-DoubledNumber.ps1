@@ -1,4 +1,4 @@
-#Requires -Version 7.0
+#Requires -Version 7.5
 [CmdletBinding()]
 param(
     [Parameter(ValueFromPipeline, ValueFromPipelineByPropertyName, Mandatory)]
@@ -19,3 +19,4 @@ process {
 end {
     Write-Verbose "Processed $count numbers in total."
 }
+

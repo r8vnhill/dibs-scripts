@@ -22,7 +22,7 @@
 
     Creates README content for “Keen” and prints an informational message before output.
 #>
-#Requires -Version 7.0
+#Requires -Version 7.5
 [CmdletBinding()]
 param(
     [Parameter(Mandatory)]
@@ -39,3 +39,4 @@ Project initialized on {1}.
 
 Learn more about READMEs at https://www.makeareadme.com/.
 '@ -f $Name, (Get-Date -Format 'yyyy-MM-dd HH:mm:ss')
+

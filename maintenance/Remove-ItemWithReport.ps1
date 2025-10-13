@@ -1,4 +1,4 @@
-#Requires -Version 7.0
+#Requires -Version 7.5
 [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
 param(
     [Parameter(Mandatory)]
@@ -29,3 +29,4 @@ return [pscustomobject]@{
     Deleted = $deleted
     Errors  = $errors
 }
+

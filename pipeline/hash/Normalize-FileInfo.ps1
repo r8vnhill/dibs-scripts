@@ -1,3 +1,4 @@
+#Requires -Version 7.5
 [CmdletBinding()]
 [OutputType([pscustomobject])]
 param(
@@ -32,3 +33,4 @@ process {
 end {
     Write-Verbose "Ending $($PSCmdlet.MyInvocation.MyCommand.Name)"
 }
+

@@ -1,4 +1,4 @@
-#Requires -Version 7.0
+#Requires -Version 7.5
 [CmdletBinding()]
 param(
     [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
@@ -37,3 +37,4 @@ process {
         }
     }
 }
+

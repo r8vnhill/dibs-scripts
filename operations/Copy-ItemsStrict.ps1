@@ -1,4 +1,4 @@
-#Requires -Version 7.0
+#Requires -Version 7.5
 [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Medium')]
 param(
     [Parameter(Mandatory)]
@@ -77,3 +77,4 @@ finally {
     Write-Verbose ('Finalizado. Copiados={0}, Omitidos={1}, Errores={2}' -f $copied.Count,
         $skipped.Count, $failures.Count)
 }
+

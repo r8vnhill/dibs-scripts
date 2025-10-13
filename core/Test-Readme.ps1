@@ -1,4 +1,4 @@
-#Requires -Version 7.0
+#Requires -Version 7.5
 [CmdletBinding()]
 param(
     [Parameter(Mandatory)]
@@ -22,3 +22,4 @@ else {
     Write-Verbose 'README.md does not follow expected format.'
     $false
 }
+

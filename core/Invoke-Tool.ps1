@@ -1,4 +1,4 @@
-#Requires -Version 7.0
+#Requires -Version 7.5
 [CmdletBinding()]
 param(
     [Parameter(Mandatory)]
@@ -39,3 +39,4 @@ $nl = [Environment]::NewLine
 $msg = ('{0} {1} devolvió código {2}.{3}Salida:{3}{4}' -f $Name, ($Rest -join ' '), 
     $LASTEXITCODE, $nl, ($out -join $nl))
 throw [System.Exception]::new($msg)
+

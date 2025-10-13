@@ -1,4 +1,4 @@
-#Requires -Version 7.0
+#Requires -Version 7.5
 [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Medium')]
 param(
     [Parameter(Mandatory)]
@@ -50,3 +50,4 @@ $result.SetRemote = (
     & $setRemote @forward -Path $LiteralPath -RemoteName 'origin' -RemoteUrl $remoteUrl)
 
 [pscustomobject]$result
+

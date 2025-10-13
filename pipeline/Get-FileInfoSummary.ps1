@@ -1,4 +1,4 @@
-#Requires -Version 7.0
+#Requires -Version 7.5
 [CmdletBinding(DefaultParameterSetName = 'ByObject')]
 [OutputType([pscustomobject])]
 param(
@@ -46,3 +46,4 @@ process {
 end {
     Write-Verbose "Processed $count file(s)."
 }
+

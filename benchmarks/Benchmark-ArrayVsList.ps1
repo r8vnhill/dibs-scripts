@@ -1,3 +1,4 @@
+#Requires -Version 7.5
 $n = 100000
 
 $results = @()
@@ -24,3 +25,4 @@ $results += [pscustomobject]@{
 
 # Mostrar como tabla
 $results | Format-Table -AutoSize
+

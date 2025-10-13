@@ -1,4 +1,4 @@
-#Requires -Version 7.4
+#Requires -Version 7.5
 [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Medium')]
 param(
     [Parameter(Mandatory)]
@@ -54,3 +54,4 @@ foreach ($readme in $foundReadmes) {
         Write-Warning ('README already has a License section -> {0}' -f $readme.FullName)
     }
 }
+

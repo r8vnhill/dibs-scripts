@@ -1,3 +1,4 @@
+#Requires -Version 7.5
 [CmdletBinding()]
 param(
     [string] $Settings = "$PSScriptRoot/../PSScriptAnalyzerSettings.psd1",
@@ -89,3 +90,4 @@ if ($allResults) {
 else {
     Write-Output 'No issues found. ✅'
 }
+

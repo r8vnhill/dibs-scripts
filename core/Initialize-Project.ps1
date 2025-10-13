@@ -1,4 +1,4 @@
-#Requires -Version 7.4
+#Requires -Version 7.5
 [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Medium')]
 param(
     [Parameter(Mandatory)]
