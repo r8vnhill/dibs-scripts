@@ -1,14 +1,15 @@
 #Requires -Version 7.5
 $n = 100000
-
 $results = @()
 
 # Arreglo con +=
 $timeArray = Measure-Command {
     $a = @()
-    1..$n | ForEach-Object { $a += "x$_" }
+    foreach ($i in 1..$n) {
+        $a += "x$i"
+    }
 }
-$results += [pscustomobject]@{
+$results += @{
     Method            = 'Array +='
     TotalMilliseconds = $timeArray.TotalMilliseconds
 }
@@ -16,13 +17,17 @@ $results += [pscustomobject]@{
 # List[T] con Add()
 $timeList = Measure-Command {
     $l = [System.Collections.Generic.List[string]]::new()
-    1..$n | ForEach-Object { $l.Add("x$_") }
+    foreach ($i in 1..$n) {
+        $l.Add("x$i")
+    }
 }
-$results += [pscustomobject]@{
+$results += @{
     Method            = 'List[T].Add()'
     TotalMilliseconds = $timeList.TotalMilliseconds
 }
 
 # Mostrar como tabla
-$results | Format-Table -AutoSize
-
+Write-Output ('{0,-20} {1,10}' -f 'Método', 'Tiempo (ms)')
+foreach ($r in $results) {
+    Write-Output ('{0,-20} {1,10}' -f $r.Method, $r.TotalMilliseconds)
+}

@@ -2,31 +2,45 @@
 [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
 param(
     [Parameter(Mandatory)]
-    [string[]] $Path
+    [ValidateNotNullOrEmpty()]
+    [System.Collections.Generic.List[string]] $Path
 )
 
-$deleted = @()
-$errors = @()
+$result = [ordered]@{
+    Deleted = [System.Collections.Generic.List[string]]::new()
+    Errors  = [System.Collections.Generic.List[ordered]]::new()
+}
 
 foreach ($p in $Path) {
     if ($PSCmdlet.ShouldProcess($p, 'Remove item')) {
-        $localErr = $null
-        Remove-Item -LiteralPath $p -Force -ErrorAction SilentlyContinue -ErrorVariable localErr
+        $err = $null
+        $params = @{
+            LiteralPath   = $p
+            Force         = $true
+            ErrorAction   = 'SilentlyContinue'
+            ErrorVariable = 'err'
+        }
+        Remove-Item @params
 
-        if ($localErr) {
-            $errors += [pscustomobject]@{
-                Path    = $p
-                Message = $localErr[0].Exception.Message
-            }
+        if ($err) {
+            $result.Errors.Add([ordered]@{
+                    Path    = $p
+                    Message = $err[0].Exception.Message
+                })
         }
         else {
-            $deleted += $p
+            $result.Deleted.Add($p)
         }
     }
 }
 
-return [pscustomobject]@{
-    Deleted = $deleted
-    Errors  = $errors
+if ($result.Deleted) {
+    Write-Output ('Deleted items: {0}' -f ($result.Deleted -join ', '))
 }
 
+if ($result.Errors) {
+    Write-Warning ('Errors encountered for {0} item(s):' -f $result.Errors.Count)
+    foreach ($e in $result.Errors) {
+        Write-Warning ('[{0}] {1}' -f $e.Path, $e.Message)
+    }
+}

@@ -7,74 +7,65 @@ param(
 
     [Parameter(Mandatory)]
     [ValidateNotNullOrEmpty()]
+    [ValidateScript({ Test-Path -LiteralPath $_ -PathType Container })]
     [string]  $Destination,
 
-    [switch] $Recurse,
-    [switch] $Overwrite
+    [switch] $Recurse
 )
 
-$copied = @()
-$skipped = @()
-$failures = @()
+$result = [ordered]@{
+    Copied   = [System.Collections.Generic.List[string]]::new()
+    Skipped  = [System.Collections.Generic.List[ordered]]::new()
+    Failures = [System.Collections.Generic.List[ordered]]::new()
+}
 
 $destPath = $PSCmdlet.GetUnresolvedProviderPathFromPSPath($Destination)
-if (!(Test-Path -LiteralPath $destPath) -and
-    $PSCmdlet.ShouldProcess($destPath, 'Create destination directory')) {
-    New-Item -ItemType Directory -Path $destPath -Force | Out-Null
-}
 
 try {
     foreach ($s in $Source) {
         $src = $PSCmdlet.GetUnresolvedProviderPathFromPSPath($s)
-        $target = Join-Path -Path $destPath -ChildPath (Split-Path -Leaf $src)
+        $target = Join-Path $destPath (Split-Path -Leaf $src)
 
         if ($PSCmdlet.ShouldProcess($src, "Copy to $destPath")) {
-            if (!$Overwrite -and (Test-Path -LiteralPath $target)) {
-                $skipped += [pscustomobject]@{
-                    File   = $src
-                    Reason = 'Exists'
-                    Target = $target
+            if (!(Test-Path -LiteralPath $target)) {
+                $copyParams = @{
+                    LiteralPath = $src
+                    Destination = $destPath
+                    Recurse     = $Recurse
+                    ErrorAction = 'Stop'
                 }
-                continue
-            }
 
-            $copyParams = @{
-                LiteralPath = $src
-                Destination = $destPath
-                Recurse     = $Recurse
-                Force       = $Overwrite
-                ErrorAction = 'Stop'
-            }
-
-            try {
-                Copy-Item @copyParams
-                $copied += $src
-            }
-            catch {
-                $failures += [pscustomobject]@{
-                    File    = $src
-                    Kind    = $PSItem.Exception.GetType().Name
-                    Message = $PSItem.Exception.Message
+                try {
+                    Copy-Item @copyParams
+                    $result.Copied.Add($src)
                 }
+                catch {
+                    $result.Failures.Add([ordered]@{
+                            File    = $src
+                            Kind    = $PSItem.Exception.GetType().Name
+                            Message = $PSItem.Exception.Message
+                        })
+                }
+            }
+            else {
+                $result.Skipped.Add([ordered]@{
+                        File   = $src
+                        Reason = 'Exists'
+                        Target = $target
+                    })
             }
         }
     }
 
-    $result = [pscustomobject]@{
-        Destination = $destPath
-        Copied      = $copied
-        Skipped     = $skipped
-        Failures    = $failures
+    Write-Verbose ('Copied items: {0}' -f ($result.Copied -join ', '))
+    foreach ($s in $result.Skipped) {
+        Write-Warning ('Skipped: {0} -> {1} ({2})' -f $s.File, $s.Target, $s.Reason)
     }
-
-    if ($failures.Count) {
-        Write-Warning "Copiado parcial: $($failures.Count) error(es)"
+    foreach ($f in $result.Failures) {
+        Write-Warning ('Failed: {0} ({1}) -> {2}' -f $f.File, $f.Kind, $f.Message)
     }
-
-    return $result
 }
 finally {
-    Write-Verbose ('Finalizado. Copiados={0}, Omitidos={1}, Errores={2}' -f $copied.Count,
-        $skipped.Count, $failures.Count)
+    Write-Output ('Finalizado. Copiados={0}, Omitidos={1}, Errores={2}' -f
+        $result.Copied.Count, $result.Skipped.Count, $result.Failures.Count)
 }
-
