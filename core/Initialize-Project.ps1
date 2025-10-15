@@ -11,8 +11,7 @@ param(
     [string] $Path
 )
 
-$base = $PSCmdlet.GetUnresolvedProviderPathFromPSPath($Path,
-    [ref](Get-PSProvider FileSystem))
+$base = $PSCmdlet.GetUnresolvedProviderPathFromPSPath($Path)
 $target = Join-Path $base $Name
 $readmePath = Join-Path $target 'README.md'
 $helperPath = Join-Path $PSScriptRoot 'New-Readme.ps1' -Resolve

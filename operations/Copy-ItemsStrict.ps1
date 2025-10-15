@@ -3,7 +3,7 @@
 param(
     [Parameter(Mandatory)]
     [ValidateNotNullOrEmpty()]
-    [string[]] $Source,
+    [System.Collections.Generic.List[string]] $Source,
 
     [Parameter(Mandatory)]
     [ValidateNotNullOrEmpty()]
@@ -13,10 +13,10 @@ param(
     [switch] $Recurse
 )
 
-$result = [ordered]@{
+$result = @{
     Copied   = [System.Collections.Generic.List[string]]::new()
-    Skipped  = [System.Collections.Generic.List[ordered]]::new()
-    Failures = [System.Collections.Generic.List[ordered]]::new()
+    Skipped  = [System.Collections.Generic.List[hashtable]]::new()
+    Failures = [System.Collections.Generic.List[hashtable]]::new()
 }
 
 $destPath = $PSCmdlet.GetUnresolvedProviderPathFromPSPath($Destination)
@@ -40,15 +40,15 @@ try {
                     $result.Copied.Add($src)
                 }
                 catch {
-                    $result.Failures.Add([ordered]@{
+                    $result.Failures.Add(@{
                             File    = $src
-                            Kind    = $PSItem.Exception.GetType().Name
-                            Message = $PSItem.Exception.Message
+                            Kind    = $_.Exception.GetType().Name
+                            Message = $_.Exception.Message
                         })
                 }
             }
             else {
-                $result.Skipped.Add([ordered]@{
+                $result.Skipped.Add(@{
                         File   = $src
                         Reason = 'Exists'
                         Target = $target
