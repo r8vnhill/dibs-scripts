@@ -10,7 +10,7 @@ param(
     [string] $LastName
 )
 
-@{
+[PSCustomObject]@{
     FirstName = $FirstName
     LastName  = $LastName
 }
