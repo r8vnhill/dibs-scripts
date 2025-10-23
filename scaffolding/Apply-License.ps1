@@ -54,4 +54,3 @@ foreach ($readme in $foundReadmes) {
         Write-Warning ('README already has a License section -> {0}' -f $readme.FullName)
     }
 }
-
