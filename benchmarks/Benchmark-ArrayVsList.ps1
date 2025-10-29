@@ -1,6 +1,6 @@
 #Requires -Version 7.5
 $n = 100000
-$results = @()
+$results = [System.Collections.Generic.List[PSCustomObject]]::new()
 
 # Arreglo con +=
 $timeArray = Measure-Command {
@@ -9,10 +9,10 @@ $timeArray = Measure-Command {
         $a += "x$i"
     }
 }
-$results += @{
-    Method            = 'Array +='
-    TotalMilliseconds = $timeArray.TotalMilliseconds
-}
+$results.Add([PSCustomObject]@{
+        Method            = 'Array +='
+        TotalMilliseconds = $timeArray.TotalMilliseconds
+    })
 
 # List[T] con Add()
 $timeList = Measure-Command {
@@ -21,13 +21,9 @@ $timeList = Measure-Command {
         $l.Add("x$i")
     }
 }
-$results += @{
-    Method            = 'List[T].Add()'
-    TotalMilliseconds = $timeList.TotalMilliseconds
-}
+$results.Add([PSCustomObject]@{
+        Method            = 'List[T].Add()'
+        TotalMilliseconds = $timeList.TotalMilliseconds
+    })
 
-# Mostrar como tabla
-Write-Output ('{0,-20} {1,10}' -f 'Método', 'Tiempo (ms)')
-foreach ($r in $results) {
-    Write-Output ('{0,-20} {1,10}' -f $r.Method, $r.TotalMilliseconds)
-}
+$results

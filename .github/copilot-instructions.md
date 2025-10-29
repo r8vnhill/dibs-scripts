@@ -42,6 +42,25 @@ Why this structure: scripts are grouped by operational domain (git, maintenance,
 
 - Error handling: set `$ErrorActionPreference = 'Stop'` and throw on unrecoverable conditions so PSSA/CI can detect failures.
 
+- Avoid using the PowerShell backtick (`) as a line-continuation character in generated or edited scripts. Backticks are brittle (invisible trailing whitespace breaks them) and make diffs/noise worse. Prefer one of these alternatives:
+  - Splatting: build a hashtable of parameters and call cmdlets with `@params` (clean and explicit).
+  - Parentheses or subexpressions: wrap long expressions or method calls in `()` to allow natural line breaks.
+  - Use here-strings for long text blocks instead of concatenation across lines.
+  - For very long pipeline expressions, prefer breaking into intermediate variables rather than forcing visual continuation.
+
+  Example (splatting preferred over backticks):
+
+  # bad (backtick continuation is fragile)
+  Remove-Item -Path $p -Recurse -Force `
+      -Verbose:$true `
+      -WhatIf:$false
+
+  # good (splatting)
+  $args = @{ Path = $p; Recurse = $true; Force = $true }
+  Remove-Item @args
+
+  We updated the codebase to replace accidental backslashes with proper continuations and splatting in maintenance scripts — follow that pattern.
+
 ## Files to inspect for examples or when extending the codebase
 - `PSScriptAnalyzerSettings.psd1` — canonical style/enforcement.
 - `tools/Invoke-PSSA.ps1` — linter runner + module-install pattern.
