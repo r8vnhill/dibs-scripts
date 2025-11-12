@@ -10,11 +10,11 @@ param(
     [string[]] $Rest = @()
 )
 
-Write-Warning 'This is the deprecated core/Invoke-Tool.ps1 script. Please use tools/Invoke-Tool.ps1 instead.'
+Set-StrictMode -Version 3.0
 
 $cmds = Get-Command -Name $Name -CommandType Application -ErrorAction Stop
 if ($cmds.Count -gt 1) {
-    Write-Warning ("Se encontraron varios ejecutables llamados '{0}'. Se usará: {1}" -f 
+    Write-Warning ("Multiple executables named '{0}' were found. Using: {1}" -f 
         $Name, $cmds[0].Source)
 }
 $path = $cmds[0].Source
@@ -29,7 +29,7 @@ finally {
 }
 
 if ($LASTEXITCODE -eq 0) {
-    @{
+    [PSCustomObject]@{
         ToolPath = $path
         ExitCode = $LASTEXITCODE
         Output   = $out
@@ -37,7 +37,7 @@ if ($LASTEXITCODE -eq 0) {
 }
 else {
     $nl = [Environment]::NewLine
-    $msg = ('{0} {1} devolvió código {2}.{3}Salida:{3}{4}' -f $Name, ($Rest -join ' '), 
+    $msg = ('{0} {1} returned exit code {2}.{3}Output:{3}{4}' -f $Name, ($Rest -join ' '), 
         $LASTEXITCODE, $nl, ($out -join $nl))
     throw [System.Exception]::new($msg)
 }
