@@ -7,7 +7,7 @@
 Companion repository for the course “Diseño e Implementación de Bibliotecas de Software (DIBS)”.
 The lessons (notes) are written in Spanish, while the source code and this repository are in English for broader reach.
 
-Status: Lesson 1 (Introduction to PowerShell scripting)
+> Status: Lesson 1 (Introduction to PowerShell scripting); Lesson 2 (Built‑in discovery and help)
 
 ## What you’ll find in this repo (Lesson 1)
 - A practical, minimal PowerShell workspace for automation.
@@ -17,6 +17,15 @@ Status: Lesson 1 (Introduction to PowerShell scripting)
 	- `scaffolding/` — project bootstrap helpers (e.g., `Initialize-Project.ps1`, `New-Readme.ps1`).
 	- `git/`, `maintenance/`, `pipeline/`, `hash/` — self-contained utilities per domain.
 	- `tools/` — tooling helpers (e.g., PSScriptAnalyzer runner `tools/Invoke-PSSA.ps1`).
+
+## Lesson 2 — Built‑in discovery and help
+- Online notes (Spanish): https://dibs.ravenhill.cl/notes/software-libraries/scripting/help/
+- Examples in this repo (brief, runnable snippets):
+	- `examples/help/Get-Command-Examples.ps1` — discover/filter commands, show syntax, search by parameter.
+	- `examples/help/Get-Help-Examples.ps1` — quick help, about_* topics, parameter help (with optional -Online).
+	- `examples/help/CommentBasedHelp-Template.ps1` — minimal comment‑based help template.
+
+Run them directly to explore; they return objects and avoid host writes.
 
 ## Requirements
 - PowerShell 7.5 or newer
