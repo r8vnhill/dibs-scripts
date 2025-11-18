@@ -6,16 +6,13 @@ param(
     [string] $Path
 )
 
-$invoker = Join-Path $PSScriptRoot '..' 'core' 'Invoke-Tool.ps1' -Resolve
-
-$repoPath = $PSCmdlet.GetResolvedProviderPathFromPSPath($Path)
+$invoker = Join-Path $PSScriptRoot '..' 'tools' 'Invoke-Tool.ps1' -Resolve
 
 try {
-    Write-Verbose "Checking if '$repoPath' is inside a Git work tree"
+    $repoPath = (Resolve-Path -LiteralPath $Path -ErrorAction Stop).ProviderPath
     & $invoker git -C $repoPath rev-parse --is-inside-work-tree | Out-Null
     $true
 }
 catch {
-    Write-Verbose "'$repoPath' is not inside a Git work tree"
     $false
 }
