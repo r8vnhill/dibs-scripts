@@ -2,86 +2,68 @@
 [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Medium')]
 param(
     [Parameter(Mandatory)]
-    [ValidatePattern('^(https://|git@|ssh://)')]
-    [string] $RemoteUrl,
+    [ValidateNotNullOrWhiteSpace()]
+    [ValidateScript({ Test-Path -LiteralPath $_ -PathType Container })]
+    [string] $Path,
 
-    [Parameter()]
-    [ValidateNotNullOrEmpty()]
-    [string] $Path = '.',
+    [Parameter(Mandatory)]
+    [ValidateNotNullOrWhiteSpace()]
+    [string] $User,
 
-    [ValidatePattern('^[\w.-]+$')]
-    [string] $RemoteName = 'origin'
+    [Parameter(Mandatory)]
+    [ValidateNotNullOrWhiteSpace()]
+    [string] $Name,
+
+    [ValidateNotNullOrWhiteSpace()]
+    [string] $Remote = 'origin'
 )
 
-$invoker = Join-Path $PSScriptRoot '..' 'core' 'Invoke-Tool.ps1' -Resolve
+Set-StrictMode -Version 3.0
 
-$repoPath = $PSCmdlet.GetResolvedProviderPathFromPSPath($Path)
+$testRepo = Join-Path $PSScriptRoot 'Test-GitRepository.ps1' -Resolve
+$convertName = Join-Path $PSScriptRoot 'ConvertTo-ValidGitLabName.ps1' -Resolve
+$invoker = Join-Path $PSScriptRoot '..' 'tools' 'Invoke-Tool.ps1' -Resolve
 
-$result = @{
-    RepoPath = $repoPath
-    Remote   = $RemoteName
-    Url      = $RemoteUrl
-    Existed  = $false
-    Changed  = $false
-    Action   = 'none'
-    Output   = @()
-    Message  = ''
-}
-
-$inside = try {
-    & $invoker git -C $repoPath rev-parse --is-inside-work-tree | Out-Null
-    $true
-}
-catch { $false }
-
-if (!$inside -and $WhatIfPreference) {
-    $result.Action = 'skipped'
-    $result.Message = 'WhatIf: would set remote after repository initialization'
-}
-elseif (!$inside) {
-    throw [System.AggregateException]::new(
-        "The path '$repoPath' is not a Git repository (or does not exist).",
-        $_.Exception
+if ((& $testRepo -Path $Path).Status -ne 'IsRepository') {
+    throw [System.InvalidOperationException]::new(
+        "Path '$Path' is not a valid Git repository."
     )
 }
+
+$repoPath = (Resolve-Path -LiteralPath $Path -ErrorAction Stop).ProviderPath
+$remoteUrl = 'https://gitlab.com/{0}/{1}.git' -f $User, (& $convertName -Name $Name)
+
+$result = [PSCustomObject]@{
+    Path       = $repoPath
+    RemoteName = $Remote
+    RemoteUrl  = $remoteUrl
+    Action     = 'None'
+    Reason     = ''
+}
+
+$target = '{0} remote {1} -> {2}' -f $repoPath, $Remote, $remoteUrl
+if (!$PSCmdlet.ShouldProcess($target, 'Set Git remote')) {
+    $result.Action = 'Skipped'
+    $result.Reason = 'Operation cancelled by user.'
+}
 else {
-    $currentUrl = try {
-        $res = & $invoker git -C $repoPath remote get-url $RemoteName
-        $res.Output.Trim()
-    }
-    catch { $null }
-
-    $result.Existed = [bool]$currentUrl
-
-    if ($null -ne $currentUrl) {
-        if ([string]::Equals($currentUrl, $RemoteUrl, 'OrdinalIgnoreCase')) {
-            $result.Action = 'none'
-            $result.Message = 'Remote already configured'
+    try {
+        try {
+            & $invoker git -C $repoPath remote get-url $Remote | Out-Null
+            & $invoker git -C $repoPath remote set-url $Remote $remoteUrl | Out-Null
+            $result.Action = 'Updated'
+            $result.Reason = "Remote '$Remote' URL updated."
         }
-        elseif ($PSCmdlet.ShouldProcess("$RemoteName → $RemoteUrl", 'git remote set-url')) {
-            $set = & $invoker git -C $repoPath remote set-url $RemoteName $RemoteUrl
-            $result.Changed = $true
-            $result.Action = 'set-url'
-            $result.Output = $set.Output
-            $result.Message = "Remote URL updated (was: $currentUrl)"
-        }
-        else {
-            $result.Action = 'skipped'
-            $result.Message = 'Operation skipped'
+        catch {
+            & $invoker git -C $repoPath remote add $Remote $remoteUrl | Out-Null
+            $result.Action = 'Added'
+            $result.Reason = "Remote '$Remote' created."
         }
     }
-    elseif ($PSCmdlet.ShouldProcess("$RemoteName → $RemoteUrl", 'git remote add')) {
-        $add = & $invoker git -C $repoPath remote add $RemoteName $RemoteUrl
-        $result.Changed = $true
-        $result.Action = 'add'
-        $result.Output = $add.Output
-        $result.Message = 'Remote added'
-    }
-    else {
-        $result.Action = 'skipped'
-        $result.Message = 'Operation skipped'
+    catch {
+        $result.Action = 'Failed'
+        $result.Reason = $_
     }
 }
 
-[pscustomobject]$result
-
+$result

@@ -12,7 +12,8 @@ param(
 
 Set-StrictMode -Version 3.0
 
-$cmds = Get-Command -Name $Name -CommandType Application -ErrorAction Stop
+# Ensure we always have an array so .Count and indexing behave consistently
+$cmds = @(Get-Command -Name $Name -CommandType Application -ErrorAction Stop)
 if ($cmds.Count -gt 1) {
     Write-Warning ("Multiple executables named '{0}' were found. Using: {1}" -f 
         $Name, $cmds[0].Source)
