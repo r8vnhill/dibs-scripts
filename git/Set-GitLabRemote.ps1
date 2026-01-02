@@ -1,3 +1,38 @@
+<#
+.SYNOPSIS
+Sets or updates a GitLab remote for a local repository.
+
+.DESCRIPTION
+Validates that the path is a Git repository, normalizes the GitLab project name,
+builds the HTTPS remote URL, and then adds or updates the remote. Returns a result
+object describing the action taken.
+
+.PARAMETER Path
+Directory path to the local Git repository.
+
+.PARAMETER User
+GitLab user or group name that owns the repository.
+
+.PARAMETER Name
+Repository name (will be normalized for GitLab naming rules).
+
+.PARAMETER Remote
+Remote name to add or update. Defaults to origin.
+
+.OUTPUTS
+PSCustomObject with Path, RemoteName, RemoteUrl, Action, and Reason properties.
+
+.EXAMPLE
+PS> .\git\Set-GitLabRemote.ps1 -Path C:\work\my-repo -User acme -Name "My Project"
+
+Path        RemoteName RemoteUrl                                  Action Reason
+----        ---------- ---------                                  ------ ------
+C:\work\... origin     https://gitlab.com/acme/my-project.git      Added  Remote 'origin' created.
+
+.EXAMPLE
+PS> .\git\Set-GitLabRemote.ps1 -Path . -User acme -Name tools-api -Remote upstream -WhatIf
+WhatIf: Performing the operation "Set Git remote" on target "C:\work\repo remote upstream -> https://gitlab.com/acme/tools-api.git".
+#>
 #Requires -Version 7.5
 [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Medium')]
 param(

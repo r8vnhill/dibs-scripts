@@ -1,3 +1,32 @@
+<#
+.SYNOPSIS
+Creates a GitLab repository if it does not already exist.
+
+.DESCRIPTION
+Normalizes the repository name for GitLab, checks if it exists via `glab repo view`,
+and creates it when missing. Returns an object with the normalized name, visibility,
+and a Status object describing whether it was created or why it was skipped/failed.
+
+.PARAMETER Name
+Repository name to create (will be normalized for GitLab naming rules).
+
+.PARAMETER Public
+Create the repository as public. Defaults to private when omitted.
+
+.OUTPUTS
+PSCustomObject with Name, Visibility, and Status properties.
+
+.EXAMPLE
+PS> .\git\New-GitLabRepository.ps1 -Name "My Project"
+
+Name       Visibility Status
+----       ---------- ------
+my-project private    @{Created=False; Reason=...}
+
+.EXAMPLE
+PS> .\git\New-GitLabRepository.ps1 -Name "tools-api" -Public -WhatIf
+WhatIf: Performing the operation "Create GitLab repository (public)" on target "tools-api".
+#>
 #Requires -Version 7.5
 [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Medium')]
 param(
