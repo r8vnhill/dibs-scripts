@@ -1,0 +1,26 @@
+[
+  {
+    "path": "tests/fixtures/alpha.txt",
+    "hash": "F198CDDECFCC3157E56ABC2794334313C347432F6A8473FA3FFCDEAF08DB6600"
+  },
+  {
+    "path": "tests/fixtures/beta.txt",
+    "hash": "1967FDC55DCDB0CBAF20036F27AA741939E7137CEBF314B3B4F48EFC89C2E4F3"
+  },
+  {
+    "path": "tests/fixtures/gamma.txt",
+    "hash": "240EEB6E02BF0BCE934636205E723022C37CE2F60E89DC235C52A324F876F8FD"
+  },
+  {
+    "path": "tests/fixtures/alpha.txt",
+    "hash": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "path": "tests/fixtures/beta.txt",
+    "hash": "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"
+  },
+  {
+    "path": "tests/fixtures/gamma.txt",
+    "hash": "240EEB6E02BF0BCE934636205E723022C37CE2F60E89DC235C52A324F876F8F0"
+  }
+]

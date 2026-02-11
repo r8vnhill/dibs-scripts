@@ -1,0 +1,47 @@
+<Objs Version="1.1.0.1" xmlns="http://schemas.microsoft.com/powershell/2004/04">
+  <Obj RefId="0">
+    <TN RefId="0">
+      <T>System.Management.Automation.PSCustomObject</T>
+      <T>System.Object</T>
+    </TN>
+    <MS>
+      <S N="Path">tests/fixtures/alpha.txt</S>
+      <S N="ExpectedHash">F198CDDECFCC3157E56ABC2794334313C347432F6A8473FA3FFCDEAF08DB6600</S>
+    </MS>
+  </Obj>
+  <Obj RefId="1">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="Path">tests/fixtures/beta.txt</S>
+      <S N="ExpectedHash">1967FDC55DCDB0CBAF20036F27AA741939E7137CEBF314B3B4F48EFC89C2E4F3</S>
+    </MS>
+  </Obj>
+  <Obj RefId="2">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="Path">tests/fixtures/gamma.txt</S>
+      <S N="ExpectedHash">240EEB6E02BF0BCE934636205E723022C37CE2F60E89DC235C52A324F876F8FD</S>
+    </MS>
+  </Obj>
+  <Obj RefId="3">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="Path">tests/fixtures/alpha.txt</S>
+      <S N="ExpectedHash">0000000000000000000000000000000000000000000000000000000000000000</S>
+    </MS>
+  </Obj>
+  <Obj RefId="4">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="Path">tests/fixtures/beta.txt</S>
+      <S N="ExpectedHash">FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF</S>
+    </MS>
+  </Obj>
+  <Obj RefId="5">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="Path">tests/fixtures/gamma.txt</S>
+      <S N="ExpectedHash">240EEB6E02BF0BCE934636205E723022C37CE2F60E89DC235C52A324F876F8F0</S>
+    </MS>
+  </Obj>
+</Objs>
