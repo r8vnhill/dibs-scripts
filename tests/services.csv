@@ -1,0 +1,7 @@
+"NAME","EXPECTED_STATUS"
+"AppMgmt","Stopped"
+"Appinfo","Stopped"
+"NONEXISTENT_SERVICE","Running"
+"ALG","Running"
+"AppReadiness","Stopped"
+"BITS","Stopped"

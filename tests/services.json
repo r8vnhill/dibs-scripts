@@ -1,0 +1,26 @@
+[
+    {
+        "name": "AppMgmt",
+        "expectedStatus": "Stopped"
+    },
+    {
+        "name": "Appinfo",
+        "expectedStatus": "Stopped"
+    },
+    {
+        "name": "NONEXISTENT_SERVICE",
+        "expectedStatus": "Running"
+    },
+    {
+        "name": "ALG",
+        "expectedStatus": "Running"
+    },
+    {
+        "name": "AppReadiness",
+        "expectedStatus": "Stopped"
+    },
+    {
+        "name": "BITS",
+        "expectedStatus": "Stopped"
+    }
+]
