@@ -10,6 +10,7 @@ The lessons (notes) are written in Spanish, while the source code and this repos
 > Status: Lesson 1 (Introduction to PowerShell scripting); Lesson 2 (Built‑in discovery and help)
 
 ## What you’ll find in this repo (Lesson 1)
+
 - A practical, minimal PowerShell workspace for automation.
 - Idiomatic examples that favor clarity over cleverness (beginner‑friendly).
 - Scripts grouped by operational domain:
@@ -19,6 +20,7 @@ The lessons (notes) are written in Spanish, while the source code and this repos
 	- `tools/` — tooling helpers (e.g., PSScriptAnalyzer runner `tools/Invoke-PSSA.ps1`).
 
 ## Lesson 2 — Built‑in discovery and help
+
 - Online notes (Spanish): https://dibs.ravenhill.cl/notes/software-libraries/scripting/help/
 - Examples in this repo (brief, runnable snippets):
 	- `examples/help/Get-Command-Examples.ps1` — discover/filter commands, show syntax, search by parameter.
@@ -26,6 +28,15 @@ The lessons (notes) are written in Spanish, while the source code and this repos
 	- `examples/help/CommentBasedHelp-Template.ps1` — minimal comment‑based help template.
 
 Run them directly to explore; they return objects and avoid host writes.
+
+## Lesson 3 — Primer script y validación de parámetros
+
+- Online notes (Spanish): https://dibs.ravenhill.cl/notes/software-libraries/scripting/first-script/
+- Key scripts in this repo:
+	- `scaffolding/New-Readme.ps1` — generate a basic README template for a project.
+	- `core/Test-Readme.ps1` — validate a README meets minimum requirements.
+
+Learn to build your first reusable PowerShell script with typed parameters, declarative validation, and diagnostic output.
 
 ## Requirements
 - PowerShell 7.5 or newer
