@@ -1,49 +1,25 @@
+#Requires -Version 7.5
 <#
 .SYNOPSIS
-    Computes a SHA-256 “fingerprint” for each input path and outputs structured file
-    metadata.
+    Computes a SHA-256 fingerprint for each input path.
 .DESCRIPTION
-    This script is pipeline-aware and processes one element at a time. For each input, it:
+    Processes one element at a time and emits structured output for valid files.
+    For invalid inputs, writes one non-terminating error per item.
 
-    - Resolves the path with Get-Item (terminating on lookup failures via 
-      `-ErrorAction Stop`).
-    - Rejects directories (writes a non-terminating error and continues).
-    - Computes a SHA-256 hash with Get-FileHash (terminating on hashing failures).
-    - Emits a [pscustomobject] with stable, machine-friendly fields.
+    Validation flow:
+    - Resolve the path with Get-Item.
+    - Reject directories.
+    - Compute SHA-256 with Get-FileHash.
 
-    Errors are reported per element using Write-Error so callers can choose the policy
-    externally with -ErrorAction (e.g., Continue vs Stop). This design is useful for
-    automation scenarios (audits, inventories, integrity checks) where you may want either
-    resiliency or fail-fast.
+    Errors are emitted with Write-Error so callers can control behavior with
+    -ErrorAction and collect records via -ErrorVariable.
 .PARAMETER Path
-    A file path to fingerprint.
-
-    Accepts pipeline input:
-    - By value (strings piped directly).
-    - By property name (objects with Path, FullName, or LiteralPath properties).
-.EXAMPLE
-    # Tolerant mode (default): continues after per-item failures.
-    'file1.txt','missing.txt','file2.txt' | 
-        .\Get-FileFingerprint.ps1 |
-        Format-Table -AutoSize
-.EXAMPLE
-    # Strict mode: stop at the first error.
-    'file1.txt','missing.txt','file2.txt' |
-        .\Get-FileFingerprint.ps1 -ErrorAction Stop
-.EXAMPLE
-    # Object pipeline: binds FullName from Get-ChildItem via ValueFromPipelineByPropertyName.
-    Get-ChildItem -File . |
-        .\Get-FileFingerprint.ps1 |
-        Sort-Object SizeBytes -Descending
+    File path to fingerprint.
+    Accepts pipeline input by value and by property name (Path, FullName,
+    LiteralPath).
 .OUTPUTS
-    [pscustomobject] with:
-    - Path         ([string])   Absolute/expanded file path.
-    - SizeBytes    ([long])     File size in bytes.
-    - LastWriteUtc ([datetime]) Last write time in UTC.
-    - Sha256       ([string])   SHA-256 hash (hex).
+    [pscustomobject] with Path, SizeBytes, LastWriteUtc, Sha256.
 #>
-
-#Requires -Version 7.5
 [CmdletBinding()]
 param(
     [Parameter(ValueFromPipeline, ValueFromPipelineByPropertyName, Mandatory)]
@@ -54,31 +30,57 @@ param(
 begin {
     Set-StrictMode -Version 3.0
 }
+
 process {
-    try {
-        $item = Get-Item -LiteralPath $Path -ErrorAction Stop
+    $item = Get-Item -LiteralPath $Path -ErrorAction Ignore
 
-        if ($item.PSIsContainer) {
-            Write-Error ('Expected a file, got a directory: {0}' -f $Path)
-            return
+    if ($null -eq $item) {
+        $errorParams = @{
+            Message      = (
+                "Failed to fingerprint '{0}': Path does not exist or is inaccessible." -f
+                $Path
+            )
+            Category     = 'ObjectNotFound'
+            TargetObject = $Path
+            ErrorId      = 'GetFileFingerprint.ItemNotFound'
         }
-
-        $params = @{
+        Write-Error @errorParams
+    }
+    elseif ($item.PSIsContainer) {
+        $errorParams = @{
+            Message      = ('Expected a file, got a directory: {0}' -f $Path)
+            Category     = 'InvalidType'
+            TargetObject = $Path
+            ErrorId      = 'GetFileFingerprint.ExpectedFile'
+        }
+        Write-Error @errorParams
+    }
+    else {
+        $hashParams = @{
             LiteralPath = $item.FullName
             Algorithm   = 'SHA256'
-            ErrorAction = 'Stop'
+            ErrorAction = 'Ignore'
         }
-        $hash = Get-FileHash @params
+        $hash = Get-FileHash @hashParams
 
-        [pscustomobject]@{
-            Path         = $item.FullName
-            SizeBytes    = $item.Length
-            LastWriteUtc = $item.LastWriteTimeUtc
-            Sha256       = $hash.Hash
+        if ($null -eq $hash) {
+            $errorParams = @{
+                Message      = (
+                    "Failed to fingerprint '{0}': Unable to compute SHA256 hash." -f $Path
+                )
+                Category     = 'ReadError'
+                TargetObject = $Path
+                ErrorId      = 'GetFileFingerprint.HashFailed'
+            }
+            Write-Error @errorParams
         }
-    }
-    catch {
-        # Per-item error so callers can control behavior with -ErrorAction.
-        Write-Error ("Failed to fingerprint '{0}': {1}" -f $Path, $_.Exception.Message)
+        else {
+            [pscustomobject]@{
+                Path         = $item.FullName
+                SizeBytes    = $item.Length
+                LastWriteUtc = $item.LastWriteTimeUtc
+                Sha256       = $hash.Hash
+            }
+        }
     }
 }

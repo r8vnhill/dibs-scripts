@@ -7,8 +7,6 @@
 Companion repository for the course “Diseño e Implementación de Bibliotecas de Software (DIBS)”.
 The lessons (notes) are written in Spanish, while the source code and this repository are in English for broader reach.
 
-> Status: Lessons 1–4 (Introduction, discovery, scripting, and structured output)
-
 ## Table of Contents
 
 - [DIBS PowerShell Scripts — Course Companion](#dibs-powershell-scripts--course-companion)
@@ -40,6 +38,8 @@ The lessons (notes) are written in Spanish, while the source code and this repos
 | **Lesson 2** | Built‑in discovery and help           | [Notes](https://dibs.ravenhill.cl/notes/software-libraries/scripting/help/) • `examples/help/` (GetCommand, GetHelp, template examples)          |
 | **Lesson 3** | First script and parameter validation | [Notes](https://dibs.ravenhill.cl/notes/software-libraries/scripting/first-script/) • `scaffolding/New-Readme.ps1`, `core/Test-Readme.ps1`       |
 | **Lesson 4** | Structured output in PowerShell       | [Notes](https://dibs.ravenhill.cl/notes/software-libraries/scripting/structured-output/) • `models/`, `tools/network/Test-ConnectionSummary.ps1` |
+| **Lesson 5** | Safety with ShouldProcess             | [Notes](https://dibs.ravenhill.cl/notes/software-libraries/scripting/should-process/) • `operations/Copy-ItemStrict.ps1` |
+| **Lesson 6** | Pipeline error handling               | [Notes](https://dibs.ravenhill.cl/notes/software-libraries/scripting/pipelines/errors/) • `pipeline/Get-FileFingerprint.ps1`, `pipeline/Invoke-BatchFingerprint.ps1` |
 
 ## Requirements and setup
 
@@ -96,4 +96,3 @@ This repository will grow as new lessons are added.
 ## License
 
 BSD 2‑Clause — see [`LICENSE`](./LICENSE).
-
