@@ -2,7 +2,15 @@
     "workbench.colorCustomizations": {
         "activityBar.background": "#3F2818",
         "titleBar.activeBackground": "#583922",
-        "titleBar.activeForeground": "#FDFAF9"
+        "titleBar.activeForeground": "#FDFAF9",
+        "titleBar.inactiveBackground": "#6F472A",
+        "titleBar.inactiveForeground": "#FCFAF8",
+        "statusBar.background": "#6F472A",
+        "statusBar.foreground": "#FCFAF8",
+        "statusBar.debuggingBackground": "#6F472A",
+        "statusBar.debuggingForeground": "#FCFAF8",
+        "statusBar.noFolderBackground": "#6F472A",
+        "statusBar.noFolderForeground": "#FCFAF8"
     },
     "cSpell.words": [
         "glab",
