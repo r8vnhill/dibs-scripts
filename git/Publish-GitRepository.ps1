@@ -4,7 +4,7 @@ Creates a GitLab repository and sets the local Git remote.
 
 .DESCRIPTION
 Orchestrates GitLab repository creation and remote configuration by invoking
-New-GitLabRepository.ps1 and Set-GitRemote.ps1. Returns a summary object with
+New-GitLabRepository.ps1 and Set-GitLabRemote.ps1. Returns a summary object with
 the GitLab creation result and the remote update result.
 
 .PARAMETER Path
@@ -62,7 +62,7 @@ param(
 Set-StrictMode -Version 3.0
 
 $createGitLabRepo = Join-Path $PSScriptRoot 'New-GitLabRepository.ps1' -Resolve
-$setGitRemote = Join-Path $PSScriptRoot 'Set-GitRemote.ps1' -Resolve
+$setGitRemote = Join-Path $PSScriptRoot 'Set-GitLabRemote.ps1' -Resolve
 
 $forwardBoundParams = @{}
 if ($PSBoundParameters.ContainsKey('WhatIf')) {
@@ -85,3 +85,12 @@ $remoteResult = & $setGitRemote @remoteParams
     GitLab = $gitLab
     Remote = $remoteResult
 }
+
+
+Figueroa Gaona, Vicente Diego
+Banda Morales, Diego Ignacio
+Cejas Barra, Ignacia Jesús
+Ogno Urrutia, Ricardo Antonio
+Rodríguez Muñoz, Ignacio Alonso
+Silva Ríos, Sofía Belén
+Torres Peralta, Constanza Isabel
