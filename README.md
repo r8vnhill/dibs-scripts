@@ -45,6 +45,7 @@ The lessons (notes) are written in Spanish, while the source code and this repos
 | **Lesson 8**  | Declarative pipelines in PowerShell   | [Notes](https://dibs.ravenhill.cl/notes/software-libraries/scripting/pipelines/) • `pipeline/Get-DoubledNumber.ps1`, `pipeline/Test-FileHash.ps1` (filtering, projection, transformation, and pipeline composition)                                                                   |
 | **Lesson 9**  | Pipeline-aware cmdlets                | [Notes](https://dibs.ravenhill.cl/notes/software-libraries/scripting/pipelines/pipeline-aware/) • `pipeline/Get-DoubledNumber.ps1`, `pipeline/Test-FileHash.ps1`, `pipeline/Test-ServiceCompliance.ps1` (`begin/process/end`, `ValueFromPipeline`, `ValueFromPipelineByPropertyName`) |
 | **Lesson 10** | Pipeline error handling               | [Notes](https://dibs.ravenhill.cl/notes/software-libraries/scripting/pipelines/errors/) • `pipeline/Get-FileFingerprint.ps1`, `pipeline/Invoke-BatchFingerprint.ps1`                                                                                                                  |
+| **Lesson 11** | Git submodules lab                    | [Notes](https://dibs.ravenhill.cl/notes/software-libraries/scripting/pipelines/git-submodules/) • `git/New-IndexRepo.ps1`, `git/Invoke-SubmoduleTask.ps1`, `git/Publish-GitRepository.ps1`                                                                                            |
 
 ## Requirements and setup
 
@@ -96,7 +97,7 @@ In VS Code, use the "Run PSScriptAnalyzer" task (Error‑level findings will fai
 
 ## Roadmap
 
-This repository will grow as new lessons are added.
+All scripting lessons currently published in the DIBS notes are now covered in this repository.
 
 ## License
 
