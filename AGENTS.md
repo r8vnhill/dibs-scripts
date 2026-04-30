@@ -22,6 +22,7 @@ Context and essential rules for agents working in this subproject.
 - Run static analysis with `pwsh ./tools/Invoke-PSSA.ps1`.
 - Keep `PSScriptAnalyzerSettings.psd1` as the source of style and linting rules.
 - Use the narrowest script invocation needed to validate a change before running the full analyzer.
+- Do not modify changelogs unless the user explicitly asks for changelog updates.
 
 ## Code Conventions
 
