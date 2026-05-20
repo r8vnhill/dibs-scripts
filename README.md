@@ -30,6 +30,7 @@ The lessons (notes) are written in Spanish, while the source code and this repos
 	- `git/`, `maintenance/`, `pipeline/`, `operations/` — domain-specific utilities.
 	- `models/`, `examples/`, `tools/` — supporting modules, examples, and helpers.
 	- `tests/` — test data (fixtures, checksums, service lists).
+	- `Maintainer.Utils.psm1` — maintainer-only helpers for repository administration.
 
 ## Lessons at a glance
 
@@ -75,6 +76,7 @@ The lessons (notes) are written in Spanish, while the source code and this repos
 
 - `PSScriptAnalyzerSettings.psd1` — canonical style rules (indentation, whitespace, approved verbs).
 - `core/Invoke-Tool.ps1` — wrapper for external CLI invocation (normalizes encoding/exit codes).
+- `Maintainer.Utils.psm1` — maintainer utility module, including `New-DibsGitLabRepository` for creating and cloning DIBS GitLab repositories with `glab`, and `New-DibsGitLabRepositorySubmodule` for creating a GitLab repository and registering it as a submodule in an existing parent repository.
 - `scaffolding/Initialize-Project.ps1` — example: creates project folder + README, returns structured result.
 - `tools/Invoke-PSSA.ps1` — linter runner (installs PSScriptAnalyzer if needed).
 
@@ -84,6 +86,33 @@ The lessons (notes) are written in Spanish, while the source code and this repos
 - Prefer terminating errors (`$ErrorActionPreference = 'Stop'`) over `Write-Host`.
 - Use `core/Invoke-Tool.ps1` when invoking external tools (git, etc.) for consistent output.
 - Return objects instead of formatted text for pipeline composability.
+
+**Maintainer example:**
+
+```powershell
+Import-Module ./Maintainer.Utils.psm1
+
+New-DibsGitLabRepository `
+	-Name python-companion `
+	-DestinationPath E:\teaching\DIBS\projects\python-companion `
+	-WhatIf
+```
+
+**Submodule workflow example:**
+
+```powershell
+Import-Module ./Maintainer.Utils.psm1
+
+New-DibsGitLabRepositorySubmodule `
+	-Name python-companion `
+	-ParentRepositoryPath E:\teaching\DIBS\projects `
+	-SubmodulePath companions/python-companion `
+	-WhatIf
+```
+
+- `SubmodulePath` is relative to the parent repository.
+- `-WhatIf` previews both the repository creation and the submodule add step.
+- This workflow is intentionally separate from `git/New-IndexRepo.ps1`.
 
 ## Development
 
