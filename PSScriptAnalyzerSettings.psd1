@@ -38,7 +38,7 @@
 
         PSUseConsistentIndentation                  = @{
             Kind                = 'space'
-            IndentationSize     = 4
+            IndentationSize     = 2
             PipelineIndentation = 'IncreaseIndentationAfterEveryPipeline'
         }
 
